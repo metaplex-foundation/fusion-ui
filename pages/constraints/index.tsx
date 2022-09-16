@@ -1,21 +1,37 @@
-import { createRef, useState } from 'react';
-import { Typography, Box, TextField, Container, Stack } from '@mui/material'
+import { createRef, useState, useEffect } from 'react';
+import { Typography, Box, TextField, Container, Stack, Button } from '@mui/material'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey, Transaction } from '@solana/web3.js'
 import type { NextPage } from 'next'
-import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../js/src/generated'
+import { toast } from 'react-toastify';
+import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../../js/src/generated'
 
 const Constraints: NextPage = () => {
     const wallet = useWallet();
     const { connection } = useConnection();
     const nameInputRef = createRef<HTMLInputElement>();
+    const constraintModels = useState<any[]>([]);
 
+    useEffect(() => {
+        loadEscrowConstraintModels();
+    }, []);
+
+    const loadEscrowConstraintModels = async () => {
+        if (!wallet.publicKey) {
+            return;
+        }
+
+        const escrowConstraintModels = await connection.getProgramAccounts(PROGRAM_ID, {
+            filters: [{ memcmp: { offset: 1, bytes: wallet.publicKey.toBase58() } }],
+        });
+
+        console.log({ escrowConstraintModels });
+    }
 
     const createEscrowConstraintModelAccount = async (name: string) => {
         if (!wallet.publicKey) {
             return;
         }
-
 
         const [escrowConstraintModelAddress, _escrowConstraintModelAddressBump] = PublicKey.findProgramAddressSync([
             Buffer.from("metadata"),
@@ -33,11 +49,20 @@ const Constraints: NextPage = () => {
             createEscrowConstraintModelAccountArgs: { name }
         });
 
+
         const tx = new Transaction();
         tx.add(ix);
 
-        const signature = await wallet.sendTransaction(tx, connection);
-        console.log({ signature });
+        try {
+            const sig = await wallet.sendTransaction(tx, connection);
+            toast.success("Transaction Success");
+            console.log({ sig });
+            window.location.href = `constraints/${escrowConstraintModelAddress}`;
+        } catch (e) {
+            console.log(e);
+            toast.error("Transaction Failed");
+        }
+
 
     }
     return (
@@ -56,8 +81,8 @@ const Constraints: NextPage = () => {
                     }}
                 >
                     <Stack direction="column" spacing={2}>
-                        <TextField id="name" label="Name" variant="outlined" sx={{ background: "#dfdfdf" }} inputRef={nameInputRef} />
-                        <button type="submit" >Submit</button>
+                        <TextField id="name" label="Name" variant="outlined" inputRef={nameInputRef} />
+                        <Button variant="outlined" type="submit" >Submit</Button>
                     </Stack>
                 </Box>
             </Stack>

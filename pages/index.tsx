@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
+import { List, ListItem } from "@mui/material"
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import Link from 'next/link'
 
 const Home: NextPage = () => {
   return (
@@ -10,6 +12,15 @@ const Home: NextPage = () => {
         <meta name="description" content="Fusion UI" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <List>
+        <ListItem>
+          <Link href="/constraints" >Create A Constraint Model</Link>
+        </ListItem>
+        <ListItem>
+          <Link href="/toe" >Create A Token-Owned Escrow</Link>
+        </ListItem>
+      </List>
     </div>
   )
 }
