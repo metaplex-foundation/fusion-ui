@@ -5,7 +5,7 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Container, Typography, Stack, Button, List, ListItem } from "@mui/material";
-import { EscrowConstraintModel, EscrowConstraint } from "../../js/src/generated";
+import { EscrowConstraintModel, EscrowConstraint, createAddConstraintToEscrowConstraintModelInstruction } from "../../js/src/generated";
 import { EscrowConstraintForm } from "../../components/EscrowConstraintForm";
 
 const ConstraintDetail: NextPage = () => {
@@ -43,6 +43,31 @@ const ConstraintDetail: NextPage = () => {
         setShowConstraintForm(true);
     }
 
+    const handleConstraintFormSubmit = async (constraint: EscrowConstraint) => {
+        if (!wallet.publicKey) {
+            toast.error("wallet disconnected");
+            return;
+        }
+
+        let tx = new Transaction();
+        let ix = createAddConstraintToEscrowConstraintModelInstruction({
+            escrowConstraintModel: new PublicKey(escrowConstraintModelAddress as string),
+            payer: wallet.publicKey,
+            updateAuthority: wallet.publicKey
+        }, {
+            addConstraintToEscrowConstraintModelArgs: {
+                constraint
+            }
+        });
+
+        tx.add(ix);
+
+        const sig = await wallet.sendTransaction(tx, connection)
+        console.log({ sig });
+
+        setShowConstraintForm(false)
+    }
+
     return (
         <Container>
             <Typography variant="h1">{escrowConstraintModel?.name}</Typography>
@@ -55,7 +80,7 @@ const ConstraintDetail: NextPage = () => {
                     <ListItem></ListItem>
                 </List>
                 {!showConstraintForm ? <Button variant="outlined" onClick={handleAddConstraintClick}>Add a Constraint</Button> : null}
-                {showConstraintForm ? <EscrowConstraintForm setFormVisible={setShowConstraintForm} onSubmit={async () => { }} /> : null}
+                {showConstraintForm ? <EscrowConstraintForm onSubmit={handleConstraintFormSubmit} /> : null}
             </Stack>
         </Container>);
 }
