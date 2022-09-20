@@ -67,24 +67,21 @@ export const Setup: NextPage = () => {
                 tokenAmount: token(1),
             })
             .run();
-    }
 
-    const setupEmptyBaseToken = async () => {
-        if (!wallet.publicKey) {
-            toast.error("wallet not connected");
-            return;
-        }
-
-        if (!metaplex) {
-            toast.error("metaplex not initialized");
-            return;
-        }
+        // await metaplex
+        //     .nfts()
+        //     .create({
+        //         uri: "http://localhost:8080/assets/Combined.json",
+        //         name: "Test Dino",
+        //         sellerFeeBasisPoints: 500, // Represents 5.00%.
+        //     })
+        //     .run();
 
         await metaplex
             .nfts()
             .createSft({
-                uri: "http://localhost:8080/assets/EmptyBase.json",
-                name: "Test Dino Empty Base",
+                uri: "http://localhost:8080/assets/Base.json",
+                name: "Test Dino Base",
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
                 tokenAmount: token(1),
@@ -92,13 +89,13 @@ export const Setup: NextPage = () => {
             .run();
     }
 
+
     return <Container fixed>
         <Typography variant="h1">Setup</Typography>
         <Typography variant="subtitle1">Create attribute NFTs to use use with a TOE</Typography>
         <Box sx={{ marginTop: 8 }}>
             <Stack direction="column" spacing={2}>
                 <Button variant="outlined" onClick={setupAttributeNFTs}>Create Attribute NFTs</Button>
-                <Button variant="outlined" onClick={setupEmptyBaseToken}>Create an empty Base Token</Button>
             </Stack>
         </Box>
     </Container>
