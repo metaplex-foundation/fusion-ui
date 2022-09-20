@@ -20,6 +20,9 @@ const Home: NextPage = () => {
         <ListItem>
           <Link href="/toe" >Create A Token-Owned Escrow</Link>
         </ListItem>
+        <ListItem>
+          <Link href="/setup" >Set up example NFTs</Link>
+        </ListItem>
       </List>
     </div>
   )
