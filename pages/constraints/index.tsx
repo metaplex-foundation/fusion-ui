@@ -34,8 +34,6 @@ const Constraints: NextPage = () => {
         }
 
         const [escrowConstraintModelAddress, _escrowConstraintModelAddressBump] = PublicKey.findProgramAddressSync([
-            Buffer.from("metadata"),
-            PROGRAM_ID.toBuffer(),
             Buffer.from("escrow"),
             wallet.publicKey.toBuffer(),
             Buffer.from(name)
@@ -54,7 +52,7 @@ const Constraints: NextPage = () => {
         tx.add(ix);
 
         try {
-            const sig = await wallet.sendTransaction(tx, connection);
+            const sig = await wallet.sendTransaction(tx, connection, { skipPreflight: true });
             toast.success("Transaction Success");
             console.log({ sig });
             window.location.href = `constraints/${escrowConstraintModelAddress}`;

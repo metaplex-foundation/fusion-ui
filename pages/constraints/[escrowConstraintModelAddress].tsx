@@ -5,8 +5,10 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Container, Typography, Stack, Button, List, ListItem } from "@mui/material";
-import { EscrowConstraintModel, EscrowConstraint, createAddConstraintToEscrowConstraintModelInstruction } from "../../js/src/generated";
+import { EscrowConstraintModel, EscrowConstraint, createAddNoneConstraintToEscrowConstraintModelInstruction, createAddCollectionConstraintToEscrowConstraintModelInstruction, createAddTokensConstraintToEscrowConstraintModelInstruction } from "../../js/src/generated";
 import { EscrowConstraintForm } from "../../components/EscrowConstraintForm";
+import { ConstraintType } from "../../helpers/constraintType";
+import { findMetadataPda } from "@metaplex-foundation/js";
 
 const ConstraintDetail: NextPage = () => {
     const router = useRouter();
@@ -22,6 +24,7 @@ const ConstraintDetail: NextPage = () => {
                 return;
             }
             const maybeEscrowConstraintModel = await loadEscrowConstraintModel(new PublicKey(escrowConstraintModelAddress));
+            console.log("escrow constraint model", maybeEscrowConstraintModel);
             setEscrowConstraintModel(maybeEscrowConstraintModel);
         }
 
@@ -43,24 +46,49 @@ const ConstraintDetail: NextPage = () => {
         setShowConstraintForm(true);
     }
 
-    const handleConstraintFormSubmit = async (constraint: EscrowConstraint) => {
+    const handleConstraintFormSubmit = async (name: string, tokenLimit: number, tokens: PublicKey[], constraintType: ConstraintType) => {
         if (!wallet.publicKey) {
             toast.error("wallet disconnected");
             return;
         }
 
         let tx = new Transaction();
-        let ix = createAddConstraintToEscrowConstraintModelInstruction({
-            escrowConstraintModel: new PublicKey(escrowConstraintModelAddress as string),
-            payer: wallet.publicKey,
-            updateAuthority: wallet.publicKey
-        }, {
-            addConstraintToEscrowConstraintModelArgs: {
-                constraint
-            }
-        });
+        const escrowConstraintModel = new PublicKey(escrowConstraintModelAddress as string);
 
-        tx.add(ix);
+        switch (constraintType) {
+            case ConstraintType.None:
+                tx.add(createAddNoneConstraintToEscrowConstraintModelInstruction({
+                    escrowConstraintModel,
+                    payer: wallet.publicKey,
+                    updateAuthority: wallet.publicKey
+                }, {
+                    addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                }));
+                break;
+            case ConstraintType.Collection:
+                let [mint] = tokens;
+                let metadataAddress = findMetadataPda(mint);
+                tx.add(createAddCollectionConstraintToEscrowConstraintModelInstruction({
+                    escrowConstraintModel,
+                    payer: wallet.publicKey,
+                    updateAuthority: wallet.publicKey,
+                    collectionMint: mint,
+                    collectionMintMetadata: metadataAddress,
+                }, {
+                    addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                }));
+                break;
+            case ConstraintType.Tokens:
+                console.log("tokens");
+                break;
+            default:
+                console.log("should never happen");
+        }
+
+        console.log({
+            name, tokenLimit, tokens, constraintType
+        })
+
 
         const sig = await wallet.sendTransaction(tx, connection)
         console.log({ sig });
@@ -70,14 +98,14 @@ const ConstraintDetail: NextPage = () => {
 
     return (
         <Container>
-            <Typography variant="h1">{escrowConstraintModel?.name}</Typography>
             <Typography variant="subtitle1">Escrow Constraint Model</Typography>
+            <Typography variant="h1">{escrowConstraintModel?.name}</Typography>
             <Stack>
                 <List>
-                    {escrowConstraintModel ? escrowConstraintModel.constraints.map(constraint => (
+                    {/* {escrowConstraintModel ? escrowConstraintModel.constraints.map(constraint: EscrowConstraint => (
                         <ListItem>{constraint.name}</ListItem>
                     )) : null}
-                    <ListItem></ListItem>
+                    <ListItem></ListItem> */}
                 </List>
                 {!showConstraintForm ? <Button variant="outlined" onClick={handleAddConstraintClick}>Add a Constraint</Button> : null}
                 {showConstraintForm ? <EscrowConstraintForm onSubmit={handleConstraintFormSubmit} /> : null}

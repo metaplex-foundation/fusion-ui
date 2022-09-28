@@ -2,31 +2,42 @@ import { PublicKey } from "@solana/web3.js";
 import { Select, TextField, Stack, Typography, Box, Button, MenuItem } from "@mui/material";
 import { useState, createRef, FC } from "react";
 import { EscrowConstraintType, EscrowConstraint } from "../js/src/generated";
+import { ConstraintType } from "../helpers/constraintType";
+import { toast } from "react-toastify";
 
 type EscrowConstraintFormProps = {
-    onSubmit: (constraint: EscrowConstraint, pubkeys: PublicKey[]) => Promise<void>
+    onSubmit: (name: string, tokenLimit: number, pubkeys: PublicKey[], constraintType: ConstraintType) => Promise<void>
 }
+
 
 const nameInputRef = createRef<HTMLInputElement>();
 const pubkeyInputRef = createRef<HTMLInputElement>();
 const tokenLimitRef = createRef<HTMLInputElement>();
 
 export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }) => {
-    const [selectedConstraintType, setSelectedConstraintType] = useState<EscrowConstraintType>(EscrowConstraintType.None);
+    const [selectedConstraintType, setSelectedConstraintType] = useState<ConstraintType>(ConstraintType.None);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const name = nameInputRef.current?.value as string;
         const tokenLimit = Number(tokenLimitRef.current?.value as string);
-        const pubkeysInput = pubkeyInputRef.current?.value as string;
-        let pubkeys: PublicKey[] = [];
-        if (selectedConstraintType !== EscrowConstraintType.None) { pubkeys = pubkeysInput.split(",").map((p) => new PublicKey(p.trim())) }
-        await onSubmit({
-            name,
-            tokenLimit,
-            constraintType: selectedConstraintType
-        } as EscrowConstraint,
-            pubkeys);
+        const pubkeys = cleanPubkeys(pubkeyInputRef.current?.value as string || "");
+
+
+        await onSubmit(name, tokenLimit, pubkeys, selectedConstraintType);
+    }
+
+    const cleanPubkeys = (input: string) => {
+        const split = input.split(",")
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0);
+
+        try {
+            return split.map(s => new PublicKey(s));
+        } catch (e) {
+            toast.error(`invalid pubkey${split.length > 1 ? "s" : ""}`);
+            return [];
+        }
     }
 
     const handleSelectedConstraintTypeChange = (e: any) => {
@@ -37,14 +48,16 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
         <Stack direction="column" spacing={2}>
             <Typography>New Constraint Name</Typography>
             <TextField inputRef={nameInputRef} variant="outlined" name="Name" />
+            <Typography>Token Limit</Typography>
+            <TextField type="number" inputRef={tokenLimitRef} variant="outlined" name="TokenLimit" />
             <Typography>Constraint Type</Typography>
             <Select value={selectedConstraintType} onChange={handleSelectedConstraintTypeChange} name="Constraint Type">
-                <MenuItem value={EscrowConstraintType.None}>None</MenuItem>
-                <MenuItem value={EscrowConstraintType.Collection}>Collection</MenuItem>
-                <MenuItem value={EscrowConstraintType.Tokens}>Tokens</MenuItem>
+                <MenuItem value={ConstraintType.None}>None</MenuItem>
+                <MenuItem value={ConstraintType.Collection}>Collection</MenuItem>
+                <MenuItem value={ConstraintType.Tokens}>Tokens</MenuItem>
             </Select>
-            {selectedConstraintType === EscrowConstraintType.None ? null : <>
-                <Typography>Pubkey{selectedConstraintType === EscrowConstraintType.Tokens ? "s" : null}</Typography>
+            {selectedConstraintType === ConstraintType.None ? null : <>
+                <Typography>Pubkey{selectedConstraintType === ConstraintType.Tokens ? "s" : null}</Typography>
                 <TextField variant="outlined" name="Pubkey(s)" inputRef={pubkeyInputRef} />
             </>}
             <Button variant="outlined" type="submit">Submit</Button>
