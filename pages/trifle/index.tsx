@@ -8,6 +8,7 @@ import { AccountInfo, PublicKey, Transaction } from '@solana/web3.js';
 import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../js/src/generated';
 import { findAssociatedTokenAccountPda } from '@metaplex-foundation/js';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
+import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 import { findEscrowPda, findTriflePda } from '../../helpers/pdas';
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 import { toast } from 'react-toastify';
@@ -17,7 +18,7 @@ type EscrowConstraintModelWithPubkey = {
     escrowConstraintModel: EscrowConstraintModel
 }
 
-const Toe: NextPage = () => {
+const CreateTrifle: NextPage = () => {
     const wallet = useWallet();
     const { connection } = useConnection();
     const { metaplex } = useMetaplex();
@@ -70,28 +71,37 @@ const Toe: NextPage = () => {
             return;
         }
 
-
-        // TODO: derive escrow account
-        // TODO: derive trifle account
         let selectedNFTTokenAccountAddress = findAssociatedTokenAccountPda(selectedNFT.address, wallet.publicKey);
         let selectedEscrowConstraintModelAddress = new PublicKey(selectedEscrowConstraintModel);
+        let [trifleAddress] = await findTriflePda(selectedNFT.address, wallet.publicKey, selectedEscrowConstraintModelAddress);
+        let [escrowAddress] = await findEscrowPda(selectedNFT.address, 1, trifleAddress);
 
         const tx = new Transaction();
-        const instruction = createCreateTrifleAccountInstruction({
-            escrow: new PublicKey(""),
+        let args = {
+            escrow: escrowAddress,
             metadata: selectedNFT.metadataAddress,
             mint: selectedNFT.address,
             tokenAccount: selectedNFTTokenAccountAddress,
             edition: selectedNFT.edition.address,
-            trifleAccount: new PublicKey(""),
+            trifleAccount: trifleAddress,
             trifleAuthority: wallet.publicKey,
             escrowConstraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
-            tokenMetadataProgram: TOKEN_PROGRAM_ID
-        });
+            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+        };
 
-        tx.add(instruction);
-        // let sig = await connection.sendTransaction(tx, [wallet.publicKey!]);
+        console.log(args);
+        const instruction = createCreateTrifleAccountInstruction(args);
+
+        try {
+            tx.add(instruction);
+            let sig = await wallet.sendTransaction(tx, connection, { skipPreflight: true })
+            toast.success("Trifle account created");
+            console.log(sig);
+            window.location.href = `/trifle/${trifleAddress.toBase58()}`;
+        } catch (e) {
+            toast.error("Failed to create trifle account");
+        }
 
     }
 
@@ -119,10 +129,10 @@ const Toe: NextPage = () => {
             </Stack>
             <ImageList sx={{ width: 1120, height: 670 }} cols={5} rowHeight={220}>
                 {allNFTs.map((nft) => (
-                    <ImageListItem onClick={() => handleNFTClick(nft)} key={nft.json.image} sx={{ border: "1px solid red" }}>
+                    <ImageListItem onClick={() => handleNFTClick(nft)} key={nft.address.toString()} sx={{ border: "1px solid red" }}>
                         <img
-                            src={`${nft.json.image}`}
-                            alt={nft.json.name}
+                            src={`${nft.json?.image}`}
+                            alt={nft.json?.name}
                             loading="lazy"
                         />
                     </ImageListItem>
@@ -132,4 +142,4 @@ const Toe: NextPage = () => {
     )
 }
 
-export default Toe
+export default CreateTrifle 

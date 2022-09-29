@@ -79,6 +79,16 @@ export const Setup: NextPage = () => {
                 tokenAmount: token(1),
             })
             .run();
+
+
+        // the base token
+        await metaplex.nfts().create({
+            uri: "http://localhost:8080/assets/Combined.json",
+            name: "Test Dino",
+            sellerFeeBasisPoints: 500, // Represents 5.00%.
+            tokenOwner: wallet.publicKey,
+        }).run();
+
     }
 
     const setupCollectionNFT = async () => {

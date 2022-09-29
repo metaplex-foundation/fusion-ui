@@ -18,7 +18,7 @@ const Home: NextPage = () => {
           <Link href="/constraints" >Create A Constraint Model</Link>
         </ListItem>
         <ListItem>
-          <Link href="/toe" >Create A Token-Owned Escrow</Link>
+          <Link href="/trifle" >Create A Token-Owned Escrow</Link>
         </ListItem>
         <ListItem>
           <Link href="/setup" >Set up example NFTs</Link>
