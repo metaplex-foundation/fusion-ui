@@ -5,6 +5,7 @@ import { PublicKey, Transaction } from '@solana/web3.js'
 import type { NextPage } from 'next'
 import { toast } from 'react-toastify';
 import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../../js/src/generated'
+import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 
 const Constraints: NextPage = () => {
     const wallet = useWallet();
@@ -13,20 +14,12 @@ const Constraints: NextPage = () => {
     const constraintModels = useState<any[]>([]);
 
     useEffect(() => {
-        loadEscrowConstraintModels();
-    }, []);
-
-    const loadEscrowConstraintModels = async () => {
         if (!wallet.publicKey) {
             return;
         }
+        loadEscrowConstraintModels(wallet.publicKey, connection);
+    }, [wallet.publicKey]);
 
-        const escrowConstraintModels = await connection.getProgramAccounts(PROGRAM_ID, {
-            filters: [{ memcmp: { offset: 1, bytes: wallet.publicKey.toBase58() } }],
-        });
-
-        console.log({ escrowConstraintModels });
-    }
 
     const createEscrowConstraintModelAccount = async (name: string) => {
         if (!wallet.publicKey) {
@@ -44,7 +37,7 @@ const Constraints: NextPage = () => {
             payer: wallet.publicKey,
             updateAuthority: wallet.publicKey
         }, {
-            createEscrowConstraintModelAccountArgs: { name }
+            createEscrowConstraintModelAccountArgs: { name, schemaUri: "http://localhost:8080/assets/schema.json" }
         });
 
 

@@ -79,21 +79,24 @@ const ConstraintDetail: NextPage = () => {
                 }));
                 break;
             case ConstraintType.Tokens:
-                console.log("tokens");
+                tx.add(createAddTokensConstraintToEscrowConstraintModelInstruction({
+                    escrowConstraintModel,
+                    payer: wallet.publicKey,
+                    updateAuthority: wallet.publicKey,
+                }, {
+                    addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens }
+                }))
                 break;
             default:
-                console.log("should never happen");
+                console.log("reached impossible default case");
         }
 
-        console.log({
-            name, tokenLimit, tokens, constraintType
-        })
+        let sig = await wallet.sendTransaction(tx, connection)
 
-
-        const sig = await wallet.sendTransaction(tx, connection)
-        console.log({ sig });
-
-        setShowConstraintForm(false)
+        // TODO: reset form and reload constraint model.
+        await connection.confirmTransaction(sig);
+        setShowConstraintForm(false);
+        setEscrowConstraintModel(await loadEscrowConstraintModel(escrowConstraintModel));
     }
 
     return (
@@ -102,10 +105,13 @@ const ConstraintDetail: NextPage = () => {
             <Typography variant="h1">{escrowConstraintModel?.name}</Typography>
             <Stack>
                 <List>
-                    {/* {escrowConstraintModel ? escrowConstraintModel.constraints.map(constraint: EscrowConstraint => (
-                        <ListItem>{constraint.name}</ListItem>
-                    )) : null}
-                    <ListItem></ListItem> */}
+                    {escrowConstraintModel ? Array.from(escrowConstraintModel.constraints.entries()).map(data => {
+                        let [name, constraint] = data;
+                        // constraint component goes here.
+                        return (
+                            <div>{name}</div>
+                        )
+                    }) : null}
                 </List>
                 {!showConstraintForm ? <Button variant="outlined" onClick={handleAddConstraintClick}>Add a Constraint</Button> : null}
                 {showConstraintForm ? <EscrowConstraintForm onSubmit={handleConstraintFormSubmit} /> : null}

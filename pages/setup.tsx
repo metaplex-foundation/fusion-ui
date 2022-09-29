@@ -13,6 +13,7 @@ export const Setup: NextPage = () => {
     const wallet = useWallet();
     const { connection } = useConnection();
     const { metaplex } = useMetaplex();
+    const [collectionNFTMintAddress, setCollectionNFTMintAddress] = useState<PublicKey | undefined>(undefined);
 
     useEffect(() => {
         if (!wallet.publicKey) {
@@ -68,15 +69,6 @@ export const Setup: NextPage = () => {
             })
             .run();
 
-        // await metaplex
-        //     .nfts()
-        //     .create({
-        //         uri: "http://localhost:8080/assets/Combined.json",
-        //         name: "Test Dino",
-        //         sellerFeeBasisPoints: 500, // Represents 5.00%.
-        //     })
-        //     .run();
-
         await metaplex
             .nfts()
             .createSft({
@@ -89,6 +81,17 @@ export const Setup: NextPage = () => {
             .run();
     }
 
+    const setupCollectionNFT = async () => {
+        const result = await metaplex!.nfts().create({
+            uri: "http://localhost:8080/assets/Collection.json",
+            name: "test collection  ",
+            sellerFeeBasisPoints: 0,
+            isCollection: true,
+            collectionIsSized: true
+        }).run();
+
+        setCollectionNFTMintAddress(result.mintAddress);
+    }
 
     return <Container fixed>
         <Typography variant="h1">Setup</Typography>
@@ -96,6 +99,8 @@ export const Setup: NextPage = () => {
         <Box sx={{ marginTop: 8 }}>
             <Stack direction="column" spacing={2}>
                 <Button variant="outlined" onClick={setupAttributeNFTs}>Create Attribute NFTs</Button>
+                <Button variant="outlined" onClick={setupCollectionNFT}>Create a Collection NFT</Button>
+                {collectionNFTMintAddress && <Typography>{collectionNFTMintAddress.toString()}</Typography>}
             </Stack>
         </Box>
     </Container>
