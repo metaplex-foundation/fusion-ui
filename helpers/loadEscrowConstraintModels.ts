@@ -1,5 +1,8 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { EscrowConstraintModel, PROGRAM_ADDRESS } from "../js/src/generated";
+import {
+  EscrowConstraintModel,
+  PROGRAM_ADDRESS,
+} from "../trifle_js/src/generated";
 
 export const loadEscrowConstraintModels = async (
   publicKey: PublicKey,

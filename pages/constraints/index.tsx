@@ -4,7 +4,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey, Transaction } from '@solana/web3.js'
 import type { NextPage } from 'next'
 import { toast } from 'react-toastify';
-import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../../js/src/generated'
+import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../../trifle_js/src/generated'
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 
 const Constraints: NextPage = () => {

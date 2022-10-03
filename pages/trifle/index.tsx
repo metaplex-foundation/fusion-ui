@@ -5,13 +5,14 @@ import { useConnection, useWallet, WalletContextState } from '@solana/wallet-ada
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { Metadata, Metaplex, Nft } from '@metaplex-foundation/js';
 import { AccountInfo, PublicKey, Transaction } from '@solana/web3.js';
-import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../js/src/generated';
+import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../trifle_js/src/generated';
 import { findAssociatedTokenAccountPda } from '@metaplex-foundation/js';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 import { findEscrowPda, findTriflePda } from '../../helpers/pdas';
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 import { toast } from 'react-toastify';
+import { loadNFTs } from '../../helpers/loadNFTs';
 
 type EscrowConstraintModelWithPubkey = {
     pubkey: PublicKey,
@@ -45,14 +46,6 @@ const CreateTrifle: NextPage = () => {
         });
     }, [wallet.publicKey, metaplex])
 
-    const loadNFTs = async (metaplex: Metaplex, wallet: WalletContextState) => {
-        const lazyNfts = await metaplex.nfts().findAllByOwner({ owner: wallet.publicKey! }).run();
-        const nftPromises = lazyNfts.map((nft) => {
-            return metaplex.nfts().findByMint({ mintAddress: (nft as Metadata).mintAddress }).run();
-        });
-
-        return await Promise.all(nftPromises);
-    }
 
     const handleNFTClick = (nft: Metadata) => {
         console.log({ nft });

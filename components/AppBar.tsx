@@ -13,7 +13,7 @@ export default function WalletButtonAppBar() {
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link href={"/"}>
-                            🍩 Fusion UI
+                            🍰 Trifle UI
                         </Link>
                     </Typography>
                     <WalletMultiButton />

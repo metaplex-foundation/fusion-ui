@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import { Select, TextField, Stack, Typography, Box, Button, MenuItem } from "@mui/material";
 import { useState, createRef, FC } from "react";
-import { EscrowConstraintType, EscrowConstraint } from "../js/src/generated";
+import { EscrowConstraintType, EscrowConstraint } from "../trifle_js/src/generated";
 import { ConstraintType } from "../helpers/constraintType";
 import { toast } from "react-toastify";
 
