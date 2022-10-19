@@ -11,6 +11,7 @@ const Constraints: NextPage = () => {
     const wallet = useWallet();
     const { connection } = useConnection();
     const nameInputRef = createRef<HTMLInputElement>();
+    const schemaInputRef = createRef<HTMLInputElement>();
     const constraintModels = useState<any[]>([]);
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const Constraints: NextPage = () => {
     }, [wallet.publicKey]);
 
 
-    const createEscrowConstraintModelAccount = async (name: string) => {
+    const createEscrowConstraintModelAccount = async (name: string, schemaUri: string) => {
         if (!wallet.publicKey) {
             return;
         }
@@ -37,7 +38,7 @@ const Constraints: NextPage = () => {
             payer: wallet.publicKey,
             updateAuthority: wallet.publicKey
         }, {
-            createEscrowConstraintModelAccountArgs: { name, schemaUri: "http://localhost:8080/assets/schema.json" }
+            createEscrowConstraintModelAccountArgs: { name, schemaUri }
         });
 
 
@@ -68,11 +69,13 @@ const Constraints: NextPage = () => {
                     onSubmit={(e) => {
                         e.preventDefault();
                         const name = nameInputRef.current?.value as string;
-                        createEscrowConstraintModelAccount(name);
+                        const schemaUri = schemaInputRef.current?.value as string;
+                        createEscrowConstraintModelAccount(name, schemaUri);
                     }}
                 >
                     <Stack direction="column" spacing={2}>
                         <TextField id="name" label="Name" variant="outlined" inputRef={nameInputRef} />
+                        <TextField id="schemaUri" label="Schema URI" variant="outlined" inputRef={schemaInputRef} />
                         <Button variant="outlined" type="submit" >Submit</Button>
                     </Stack>
                 </Box>

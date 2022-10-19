@@ -4,7 +4,7 @@ import { Button, Container, Typography, Stack, ImageList, ImageListItem, Select,
 import { useConnection, useWallet, WalletContextState } from '@solana/wallet-adapter-react';
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { Metadata, Metaplex, Nft } from '@metaplex-foundation/js';
-import { AccountInfo, PublicKey, Transaction } from '@solana/web3.js';
+import { AccountInfo, Keypair, PublicKey, Transaction } from '@solana/web3.js';
 import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../trifle_js/src/generated';
 import { findAssociatedTokenAccountPda } from '@metaplex-foundation/js';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
@@ -12,7 +12,9 @@ import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mp
 import { findEscrowPda, findTriflePda } from '../../helpers/pdas';
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 import { toast } from 'react-toastify';
-import { loadNFTs } from '../../helpers/loadNFTs';
+import { loadTrifleNFTs } from '../../helpers/loadNFTs';
+
+const METAPLEX_BUCKET = "HW6bkpPZii3fwPwAmJm4USRB8QBo91iXcCkiBSuo8UmM";
 
 type EscrowConstraintModelWithPubkey = {
     pubkey: PublicKey,
@@ -37,7 +39,7 @@ const CreateTrifle: NextPage = () => {
             return;
         }
 
-        loadNFTs(metaplex, wallet).then((nfts) => {
+        loadTrifleNFTs(metaplex, wallet).then((nfts) => {
             setAllNFTs(nfts)
         })
 
@@ -48,8 +50,11 @@ const CreateTrifle: NextPage = () => {
 
 
     const handleNFTClick = (nft: Metadata) => {
-        console.log({ nft });
-        setSelectedNFT(nft);
+        console.log(nft);
+        metaplex?.nfts().load({ metadata: nft }).run().then((loadedNFT) => {
+            console.log({ loadedNFT });
+            setSelectedNFT(loadedNFT);
+        });
     }
 
     // TODO: type this function properly
@@ -66,9 +71,10 @@ const CreateTrifle: NextPage = () => {
 
         let selectedNFTTokenAccountAddress = findAssociatedTokenAccountPda(selectedNFT.address, wallet.publicKey);
         let selectedEscrowConstraintModelAddress = new PublicKey(selectedEscrowConstraintModel);
-        let [trifleAddress] = await findTriflePda(selectedNFT.address, wallet.publicKey, selectedEscrowConstraintModelAddress);
+        let [trifleAddress] = await findTriflePda(selectedNFT.address, wallet.publicKey);
         let [escrowAddress] = await findEscrowPda(selectedNFT.address, 1, trifleAddress);
 
+        console.log(JSON.stringify(selectedNFT));
         const tx = new Transaction();
         let args = {
             escrow: escrowAddress,
@@ -78,7 +84,7 @@ const CreateTrifle: NextPage = () => {
             edition: selectedNFT.edition.address,
             trifleAccount: trifleAddress,
             trifleAuthority: wallet.publicKey,
-            escrowConstraintModel: selectedEscrowConstraintModelAddress,
+            constraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
             tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         };
@@ -102,6 +108,18 @@ const CreateTrifle: NextPage = () => {
         setSelectedEscrowConstraintModel(input.target.value as string);
     }
 
+    const createBaseNFT = async (updateAuthority: PublicKey) => {
+        let nftMint = Keypair.generate();
+        let trifleAddress = await findTriflePda(nftMint.publicKey, updateAuthority);
+        const result = await metaplex!.nfts().create({
+            uri: "https://shdw-drive.genesysgo.net/" + METAPLEX_BUCKET + "/" + trifleAddress[0].toString() + ".json",
+            name: "test base  ",
+            sellerFeeBasisPoints: 0,
+            useNewMint: nftMint
+        }).run();
+
+        handleCreateTrifleAccount(result.nft);
+    }
 
     return (
         <Container fixed>
@@ -120,7 +138,7 @@ const CreateTrifle: NextPage = () => {
                     })}
                 </Select>
             </Stack>
-            <ImageList sx={{ width: 1120, height: 670 }} cols={5} rowHeight={220}>
+            {allNFTs.length > 0 && (<ImageList sx={{ width: 1120, height: 670 }} cols={5} rowHeight={220}>
                 {allNFTs.map((nft) => (
                     <ImageListItem onClick={() => handleNFTClick(nft)} key={nft.address.toString()} sx={{ border: "1px solid red" }}>
                         <img
@@ -130,7 +148,9 @@ const CreateTrifle: NextPage = () => {
                         />
                     </ImageListItem>
                 ))}
-            </ImageList>
+            </ImageList>)}
+            {allNFTs.length === 0 && (
+                <Button variant="outlined" onClick={() => {if (wallet.publicKey) {createBaseNFT(wallet.publicKey);}}}>Create a Base NFT</Button>)}
         </Container >
     )
 }

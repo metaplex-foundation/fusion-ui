@@ -26,10 +26,13 @@ const TrifleDetail: NextPage = () => {
     const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
     const [allNFTs, setAllNFTs] = useState<(Nft | Sft | SftWithToken | NftWithToken)[]>([]);
     const [selectedNFT, setSelectedNFT] = useState<(Nft | Sft | SftWithToken | NftWithToken | null)>(null);
+    const [time, setTime] = useState<number>(0);
 
     let { publicKey: trifleAddressString } = router.query;
 
     useEffect(() => {
+        let interval = setInterval(() => setTime(Date.now()), 30000);
+
         if (!wallet.publicKey) {
             return;
         }
@@ -40,8 +43,8 @@ const TrifleDetail: NextPage = () => {
             return;
         }
 
-        load().then(() => console.log('loaded'));
-    }, [trifleAddressString, metaplex, wallet.publicKey]);
+        load().then(() => clearInterval(interval));
+    }, [trifleAddressString, metaplex, wallet.publicKey, time]);
 
     const load = async () => {
         let trifle = await loadTrifleAccount(new PublicKey(trifleAddressString as string));
@@ -59,6 +62,7 @@ const TrifleDetail: NextPage = () => {
 
         // load the base token nft data
         let baseToken = await metaplex!.nfts().findByMint({ mintAddress: escrow!.baseToken }).run();
+        console.log(baseToken.address.toString());
         setBaseToken(baseToken as Nft);
 
         const nfts = await loadNFTs(metaplex!, wallet);
@@ -116,7 +120,7 @@ const TrifleDetail: NextPage = () => {
         let attributeDstAddress: PublicKey = await getAssociatedTokenAddress(selectedNFT.mint.address, trifle!.tokenEscrow, true);
         let attributeSrcAddress: PublicKey = await getAssociatedTokenAddress(selectedNFT.mint.address, wallet.publicKey!);
         let escrowTokenAccountAddress: PublicKey = await getAssociatedTokenAddress(escrow!.baseToken, trifle!.tokenEscrow, true);
-        console.log({ trifle, escrowConstraintModel, escrow, selectedNFT, selectedSlot });
+        console.log(JSON.stringify({ trifle, escrowConstraintModel, escrow, selectedNFT, selectedSlot }));
         const tx = new Transaction();
         const instruction = createTransferInInstruction({
             trifleAccount: new PublicKey(trifleAddressString as string),
@@ -154,7 +158,7 @@ const TrifleDetail: NextPage = () => {
             <Typography variant="h1">Trifle</Typography>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <Stack direction={"column"}>
-                    {baseToken?.json?.image && <img src={baseToken.json.image} height={500} width={500} />}
+                    {baseToken?.json?.image && <img key={Date.now()} src={baseToken.json.image + "?" + Date.now()} height={500} width={500} />}
                 </Stack>
                 <Stack direction={"column"} alignItems={"stretch"}>
                     <Typography variant={"h6"}>{selectedNFT?.json?.name || "Select an attribute NFT to transfer in"}</Typography>

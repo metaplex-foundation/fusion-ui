@@ -5,14 +5,12 @@ import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ADDRESS } from "@metaplex-fou
 export const findTriflePda = async (
   mint: PublicKey,
   authority: PublicKey,
-  escrow_constraint_model: PublicKey,
 ) => {
   return await PublicKey.findProgramAddress(
     [
       Buffer.from("trifle"),
       mint.toBuffer(),
       authority.toBuffer(),
-      escrow_constraint_model.toBuffer(),
     ],
     new PublicKey(PROGRAM_ADDRESS),
   );

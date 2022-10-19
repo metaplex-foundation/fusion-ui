@@ -39,7 +39,7 @@ export const Setup: NextPage = () => {
         await metaplex
             .nfts()
             .createSft({
-                uri: "http://localhost:8080/assets/Chain.json",
+                uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Chain.json",
                 name: "Test Dino Chain",
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
@@ -50,7 +50,7 @@ export const Setup: NextPage = () => {
         await metaplex
             .nfts()
             .createSft({
-                uri: "http://localhost:8080/assets/Dragon_Breath.json",
+                uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Dragon_Breath.json",
                 name: "Test Dino Dragon Breath",
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
@@ -61,7 +61,7 @@ export const Setup: NextPage = () => {
         await metaplex
             .nfts()
             .createSft({
-                uri: "http://localhost:8080/assets/Piercing.json",
+                uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Piercing.json",
                 name: "Test Dino Piercing",
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
@@ -72,7 +72,7 @@ export const Setup: NextPage = () => {
         await metaplex
             .nfts()
             .createSft({
-                uri: "http://localhost:8080/assets/Base.json",
+                uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Base.json",
                 name: "Test Dino Base",
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
@@ -83,7 +83,7 @@ export const Setup: NextPage = () => {
 
         // the base token
         await metaplex.nfts().create({
-            uri: "http://localhost:8080/assets/Combined.json",
+            uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Combined.json",
             name: "Test Dino",
             sellerFeeBasisPoints: 500, // Represents 5.00%.
             tokenOwner: wallet.publicKey,
@@ -93,7 +93,7 @@ export const Setup: NextPage = () => {
 
     const setupCollectionNFT = async () => {
         const result = await metaplex!.nfts().create({
-            uri: "http://localhost:8080/assets/Collection.json",
+            uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Collection.json",
             name: "test collection  ",
             sellerFeeBasisPoints: 0,
             isCollection: true,

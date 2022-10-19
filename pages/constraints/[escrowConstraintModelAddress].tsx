@@ -58,7 +58,7 @@ const ConstraintDetail: NextPage = () => {
         switch (constraintType) {
             case ConstraintType.None:
                 tx.add(createAddNoneConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey
                 }, {
@@ -69,7 +69,7 @@ const ConstraintDetail: NextPage = () => {
                 let [mint] = tokens;
                 let metadataAddress = findMetadataPda(mint);
                 tx.add(createAddCollectionConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
                     collectionMint: mint,
@@ -80,7 +80,7 @@ const ConstraintDetail: NextPage = () => {
                 break;
             case ConstraintType.Tokens:
                 tx.add(createAddTokensConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
                 }, {
