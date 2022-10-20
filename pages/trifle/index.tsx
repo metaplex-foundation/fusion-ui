@@ -46,7 +46,7 @@ const CreateTrifle: NextPage = () => {
         loadEscrowConstraintModels(wallet.publicKey, connection).then(models => {
             setEscrowConstraintModels(models)
         });
-    }, [wallet.publicKey, metaplex])
+    }, [wallet.publicKey, metaplex, wallet, connection])
 
 
     const handleNFTClick = (nft: Metadata) => {
@@ -134,7 +134,7 @@ const CreateTrifle: NextPage = () => {
                 <Select value={selectedEscrowConstraintModel} onChange={setSelectedModel}>
                     {Object.entries(escrowConstraintModels).map(([pubkey, ecm]) => {
                         console.log({ pubkey, ecm })
-                        return <MenuItem value={pubkey}>{ecm.name}</MenuItem>
+                        return <MenuItem key={ecm.name} value={pubkey}>{ecm.name}</MenuItem>
                     })}
                 </Select>
             </Stack>

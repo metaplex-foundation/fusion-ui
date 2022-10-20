@@ -23,7 +23,7 @@ export const Setup: NextPage = () => {
         connection.getTokenAccountsByOwner(wallet.publicKey, { programId: TOKEN_PROGRAM_ID }).then(result => {
             console.log({ result });
         });
-    }, [wallet.publicKey]);
+    }, [connection, wallet.publicKey]);
 
     const setupAttributeNFTs = async () => {
         if (!wallet.publicKey) {

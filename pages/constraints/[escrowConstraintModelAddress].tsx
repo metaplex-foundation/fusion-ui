@@ -32,6 +32,7 @@ const ConstraintDetail: NextPage = () => {
             console.log("loaded");
         });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [escrowConstraintModelAddress])
 
     const loadEscrowConstraintModel = async (address: PublicKey): Promise<EscrowConstraintModel | null> => {
@@ -109,7 +110,7 @@ const ConstraintDetail: NextPage = () => {
                         let [name, constraint] = data;
                         // constraint component goes here.
                         return (
-                            <div>{name}</div>
+                            <div key={name}>{name}</div>
                         )
                     }) : null}
                 </List>

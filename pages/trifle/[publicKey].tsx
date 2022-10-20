@@ -44,6 +44,7 @@ const TrifleDetail: NextPage = () => {
         }
 
         load().then(() => clearInterval(interval));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [trifleAddressString, metaplex, wallet.publicKey, time]);
 
     const load = async () => {
@@ -164,7 +165,7 @@ const TrifleDetail: NextPage = () => {
                     <Typography variant={"h6"}>{selectedNFT?.json?.name || "Select an attribute NFT to transfer in"}</Typography>
                     <Stack direction={"row"} spacing={2}>
                         <Select value={selectedSlot} sx={{ width: "400px" }} onChange={handleSlotChange}>
-                            {slots.map((slot) => <MenuItem value={slot}>{slot}</MenuItem>)}
+                            {slots.map((slot) => <MenuItem key={slot} value={slot}>{slot}</MenuItem>)}
                         </Select>
                         <Button onClick={handleTransferClick} variant={"outlined"}>Transfer</Button>
                     </Stack>

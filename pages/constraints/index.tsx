@@ -19,7 +19,7 @@ const Constraints: NextPage = () => {
             return;
         }
         loadEscrowConstraintModels(wallet.publicKey, connection);
-    }, [wallet.publicKey]);
+    }, [connection, wallet.publicKey]);
 
 
     const createEscrowConstraintModelAccount = async (name: string, schemaUri: string) => {
