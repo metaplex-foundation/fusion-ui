@@ -1,14 +1,14 @@
 import { PublicKey } from "@solana/web3.js";
-import { Select, TextField, Stack, Typography, Box, Button, MenuItem } from "@mui/material";
+import { Checkbox, Select, TextField, Stack, Typography, Box, Button, MenuItem, FormControlLabel } from "@mui/material";
 import { useState, createRef, FC } from "react";
 import { EscrowConstraintType, EscrowConstraint } from "../trifle_js/src/generated";
 import { ConstraintType } from "../helpers/constraintType";
 import { toast } from "react-toastify";
+import { TransferEffects } from "../trifle_js/src/transfer-effects";
 
 type EscrowConstraintFormProps = {
-    onSubmit: (name: string, tokenLimit: number, pubkeys: PublicKey[], constraintType: ConstraintType) => Promise<void>
+    onSubmit: (name: string, tokenLimit: number, pubkeys: PublicKey[], constraintType: ConstraintType, transferEffects: number) => Promise<void>
 }
-
 
 const nameInputRef = createRef<HTMLInputElement>();
 const pubkeyInputRef = createRef<HTMLInputElement>();
@@ -16,6 +16,10 @@ const tokenLimitRef = createRef<HTMLInputElement>();
 
 export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }) => {
     const [selectedConstraintType, setSelectedConstraintType] = useState<ConstraintType>(ConstraintType.None);
+    const [track, setTrack] = useState<boolean>(true);
+    const [burn, setBurn] = useState<boolean>(false);
+    const [freeze, setFreeze] = useState<boolean>(false);
+    const [freezeParent, setFreezeParent] = useState<boolean>(false);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -23,8 +27,14 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
         const tokenLimit = Number(tokenLimitRef.current?.value as string);
         const pubkeys = cleanPubkeys(pubkeyInputRef.current?.value as string || "");
 
+        const transferEffects = new TransferEffects()
+            .withTrack(track)
+            .withBurn(burn)
+            .withFreeze(freeze)
+            .withFreezeParent(freezeParent)
+            .toNumber();
 
-        await onSubmit(name, tokenLimit, pubkeys, selectedConstraintType);
+        await onSubmit(name, tokenLimit, pubkeys, selectedConstraintType, transferEffects);
     }
 
     const cleanPubkeys = (input: string) => {
@@ -44,6 +54,19 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
         setSelectedConstraintType(e.target.value);
     }
 
+    const handleTrackCheckboxClick = (e: any) => {
+        setTrack(e.target.checked);
+    }
+    const handleBurnCheckboxClick = (e: any) => {
+        setBurn(e.target.checked);
+    }
+    const handleFreezeCheckboxClick = (e: any) => {
+        setFreeze(e.target.checked);
+    }
+    const handleFreezeParentCheckboxClick = (e: any) => {
+        setFreezeParent(e.target.checked);
+    }
+
     return <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
         <Stack direction="column" spacing={2}>
             <Typography>New Constraint Name</Typography>
@@ -60,6 +83,13 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
                 <Typography>Pubkey{selectedConstraintType === ConstraintType.Tokens ? "s" : null}</Typography>
                 <TextField variant="outlined" name="Pubkey(s)" inputRef={pubkeyInputRef} />
             </>}
+            <Typography>Transfer Effects</Typography>
+            <Stack direction="row">
+                <FormControlLabel control={<Checkbox checked={track} onChange={handleTrackCheckboxClick} />} label="Track" />
+                <FormControlLabel control={<Checkbox checked={burn} onChange={handleBurnCheckboxClick} />} label="Burn" />
+                <FormControlLabel control={<Checkbox checked={freeze} onChange={handleFreezeCheckboxClick} />} label="Freeze" />
+                <FormControlLabel control={<Checkbox checked={freezeParent} onChange={handleFreezeParentCheckboxClick} />} label="Freeze Parent" />
+            </Stack>
             <Button variant="outlined" type="submit">Submit</Button>
         </Stack>
     </Box >

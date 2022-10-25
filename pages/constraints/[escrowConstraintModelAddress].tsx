@@ -47,7 +47,7 @@ const ConstraintDetail: NextPage = () => {
         setShowConstraintForm(true);
     }
 
-    const handleConstraintFormSubmit = async (name: string, tokenLimit: number, tokens: PublicKey[], constraintType: ConstraintType) => {
+    const handleConstraintFormSubmit = async (name: string, tokenLimit: number, tokens: PublicKey[], constraintType: ConstraintType, transferEffects: number) => {
         if (!wallet.publicKey) {
             toast.error("wallet disconnected");
             return;
@@ -63,7 +63,7 @@ const ConstraintDetail: NextPage = () => {
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey
                 }, {
-                    addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                    addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
                 break;
             case ConstraintType.Collection:
@@ -76,7 +76,7 @@ const ConstraintDetail: NextPage = () => {
                     collectionMint: mint,
                     collectionMintMetadata: metadataAddress,
                 }, {
-                    addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                    addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
                 break;
             case ConstraintType.Tokens:
@@ -85,7 +85,7 @@ const ConstraintDetail: NextPage = () => {
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
                 }, {
-                    addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens }
+                    addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens, transferEffects }
                 }))
                 break;
             default:

@@ -76,7 +76,7 @@ const CreateTrifle: NextPage = () => {
 
         console.log(JSON.stringify(selectedNFT));
         const tx = new Transaction();
-        let args = {
+        const instruction = createCreateTrifleAccountInstruction({
             escrow: escrowAddress,
             metadata: selectedNFT.metadataAddress,
             mint: selectedNFT.address,
@@ -87,10 +87,7 @@ const CreateTrifle: NextPage = () => {
             constraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
             tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-        };
-
-        console.log(args);
-        const instruction = createCreateTrifleAccountInstruction(args);
+        });
 
         try {
             tx.add(instruction);

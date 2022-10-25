@@ -11,6 +11,7 @@ import { TokenOwnedEscrow } from "../../tm_js/src/generated";
 import { Nft, NftWithToken, Sft, SftWithToken } from "@metaplex-foundation/js";
 import { loadNFTs } from "../../helpers/loadNFTs";
 import { findAssociatedTokenAccountPda } from "@metaplex-foundation/js";
+import { PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 const TrifleDetail: NextPage = () => {
@@ -124,19 +125,20 @@ const TrifleDetail: NextPage = () => {
         console.log(JSON.stringify({ trifle, escrowConstraintModel, escrow, selectedNFT, selectedSlot }));
         const tx = new Transaction();
         const instruction = createTransferInInstruction({
-            trifleAccount: new PublicKey(trifleAddressString as string),
+            trifle: new PublicKey(trifleAddressString as string),
             constraintModel: trifle!.escrowConstraintModel!,
-            escrowAccount: trifle!.tokenEscrow!,
+            escrow: trifle!.tokenEscrow!,
             payer: wallet.publicKey!,
             trifleAuthority: wallet.publicKey!,
             attributeMint: selectedNFT.address,
-            attributeSrcTokenAccount: attributeSrcAddress,
-            attributeDstTokenAccount: attributeDstAddress,
+            attributeSrcToken: attributeSrcAddress,
+            attributeDstToken: attributeDstAddress,
             attributeMetadata: selectedNFT.metadataAddress,
             escrowMint: baseToken!.address,
-            escrowTokenAccount: escrowTokenAccountAddress,
+            escrowToken: escrowTokenAccountAddress,
+            splToken: TOKEN_PROGRAM_ID,
             splAssociatedTokenAccount: ASSOCIATED_TOKEN_PROGRAM_ID,
-            splToken: TOKEN_PROGRAM_ID
+            tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID
         }, {
             transferInArgs: {
                 slot: selectedSlot,
