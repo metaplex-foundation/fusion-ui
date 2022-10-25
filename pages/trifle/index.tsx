@@ -124,7 +124,7 @@ const CreateTrifle: NextPage = () => {
             console.log(e);
         }
 
-        handleCreateTrifleAccount(result.nft);
+        handleCreateTrifleAccount(result?.nft);
     }
 
     return (

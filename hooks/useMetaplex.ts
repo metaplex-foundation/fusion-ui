@@ -18,10 +18,5 @@ export const MetaplexContext = createContext<MetaplexContextInterface>(
 export function useMetaplex() {
   let ctx = useContext(MetaplexContext);
   ctx.metaplex?.programs().register({name: "TokenMetadataProgram", address:PROGRAM_ID});
-  let programs: string[] = [];
-  for (let program of ctx.metaplex!.programs().all()) {
-    programs.push(program.address.toString());
-  }
-  console.log(programs);
   return ctx;
 }
