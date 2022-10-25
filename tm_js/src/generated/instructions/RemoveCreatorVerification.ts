@@ -42,7 +42,7 @@ export const removeCreatorVerificationInstructionDiscriminator = 28;
  */
 export function createRemoveCreatorVerificationInstruction(
   accounts: RemoveCreatorVerificationInstructionAccounts,
-  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
+  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
 ) {
   const [data] = RemoveCreatorVerificationStruct.serialize({
     instructionDiscriminator: removeCreatorVerificationInstructionDiscriminator,

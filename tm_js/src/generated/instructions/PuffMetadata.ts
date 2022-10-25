@@ -41,7 +41,7 @@ export const puffMetadataInstructionDiscriminator = 14;
  */
 export function createPuffMetadataInstruction(
   accounts: PuffMetadataInstructionAccounts,
-  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
+  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
 ) {
   const [data] = PuffMetadataStruct.serialize({
     instructionDiscriminator: puffMetadataInstructionDiscriminator,

@@ -8,11 +8,11 @@ export const loadNFTs = async (
 ) => {
   const lazyNfts = await metaplex.nfts().findAllByOwner({
     owner: wallet.publicKey!,
-  }).run();
+  });
   const nftPromises = lazyNfts.map((nft) => {
     return metaplex.nfts().findByMint({
       mintAddress: (nft as Metadata).mintAddress,
-    }).run();
+    });
   });
 
   return await Promise.all(nftPromises);

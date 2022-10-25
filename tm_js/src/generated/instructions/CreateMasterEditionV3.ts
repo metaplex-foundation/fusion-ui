@@ -77,7 +77,7 @@ export const createMasterEditionV3InstructionDiscriminator = 17;
 export function createCreateMasterEditionV3Instruction(
   accounts: CreateMasterEditionV3InstructionAccounts,
   args: CreateMasterEditionV3InstructionArgs,
-  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
+  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
 ) {
   const [data] = CreateMasterEditionV3Struct.serialize({
     instructionDiscriminator: createMasterEditionV3InstructionDiscriminator,

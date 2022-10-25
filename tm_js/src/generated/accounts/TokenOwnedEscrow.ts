@@ -79,7 +79,7 @@ export class TokenOwnedEscrow implements TokenOwnedEscrowArgs {
    * @param programId - the program that owns the accounts we are filtering
    */
   static gpaBuilder(
-    programId: web3.PublicKey = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
+    programId: web3.PublicKey = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, tokenOwnedEscrowBeet);
   }

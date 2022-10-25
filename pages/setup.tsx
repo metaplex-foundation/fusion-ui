@@ -44,8 +44,7 @@ export const Setup: NextPage = () => {
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
                 tokenAmount: token(1),
-            })
-            .run();
+            });
 
         await metaplex
             .nfts()
@@ -55,8 +54,7 @@ export const Setup: NextPage = () => {
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
                 tokenAmount: token(1),
-            })
-            .run();
+            });
 
         await metaplex
             .nfts()
@@ -66,8 +64,7 @@ export const Setup: NextPage = () => {
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
                 tokenAmount: token(1),
-            })
-            .run();
+            });
 
         await metaplex
             .nfts()
@@ -77,17 +74,16 @@ export const Setup: NextPage = () => {
                 sellerFeeBasisPoints: 500, // Represents 5.00%.
                 tokenOwner: wallet.publicKey,
                 tokenAmount: token(1),
-            })
-            .run();
+            });
 
 
-        // the base token
-        await metaplex.nfts().create({
-            uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Combined.json",
-            name: "Test Dino",
-            sellerFeeBasisPoints: 500, // Represents 5.00%.
-            tokenOwner: wallet.publicKey,
-        }).run();
+        // // the base token
+        // await metaplex.nfts().create({
+        //     uri: "https://shdw-drive.genesysgo.net/G6yhKwkApJr1YCCmrusFibbsvrXZa4Q3GRThSHFiRJQW/Combined.json",
+        //     name: "Test Dino",
+        //     sellerFeeBasisPoints: 500, // Represents 5.00%.
+        //     tokenOwner: wallet.publicKey,
+        // });
 
     }
 
@@ -98,7 +94,7 @@ export const Setup: NextPage = () => {
             sellerFeeBasisPoints: 0,
             isCollection: true,
             collectionIsSized: true
-        }).run();
+        });
 
         setCollectionNFTMintAddress(result.mintAddress);
     }

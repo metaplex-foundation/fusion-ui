@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -7,10 +8,9 @@ import { useMetaplex } from '../../hooks/useMetaplex';
 import { toast } from 'react-toastify';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { Trifle, EscrowConstraintModel, createTransferInInstruction, createEscrowConstraintModelAccountArgsBeet } from "../../trifle_js/src/generated";
-import { TokenOwnedEscrow } from "../../tm_js/src/generated";
+import { TokenOwnedEscrow, PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from "../../tm_js/src/generated";
 import { Nft, NftWithToken, Sft, SftWithToken } from "@metaplex-foundation/js";
 import { loadNFTs } from "../../helpers/loadNFTs";
-import { findAssociatedTokenAccountPda } from "@metaplex-foundation/js";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 const TrifleDetail: NextPage = () => {
@@ -48,9 +48,11 @@ const TrifleDetail: NextPage = () => {
     }, [trifleAddressString, metaplex, wallet.publicKey, time]);
 
     const load = async () => {
+        console.log(trifleAddressString);
         let trifle = await loadTrifleAccount(new PublicKey(trifleAddressString as string));
         setTrifle(trifle!);
 
+        console.log(trifle);
         let escrowConstraintModel = await loadEscrowConstraintModel(trifle!.escrowConstraintModel);
         setEscrowConstraintModel(escrowConstraintModel!);
 
@@ -62,7 +64,7 @@ const TrifleDetail: NextPage = () => {
         setSlots(slots);
 
         // load the base token nft data
-        let baseToken = await metaplex!.nfts().findByMint({ mintAddress: escrow!.baseToken }).run();
+        let baseToken = await metaplex!.nfts().findByMint({ mintAddress: escrow!.baseToken });
         console.log(baseToken.address.toString());
         setBaseToken(baseToken as Nft);
 
@@ -83,6 +85,7 @@ const TrifleDetail: NextPage = () => {
     };
 
     const loadEscrowConstraintModel = async (escrowConstraintModelAddress: PublicKey): Promise<EscrowConstraintModel | undefined> => {
+        console.log(escrowConstraintModelAddress);
         let maybeEscrowConstraintModelAccount = await connection.getAccountInfo(escrowConstraintModelAddress);
 
         if (maybeEscrowConstraintModelAccount?.data) {
@@ -124,19 +127,21 @@ const TrifleDetail: NextPage = () => {
         console.log(JSON.stringify({ trifle, escrowConstraintModel, escrow, selectedNFT, selectedSlot }));
         const tx = new Transaction();
         const instruction = createTransferInInstruction({
-            trifleAccount: new PublicKey(trifleAddressString as string),
-            constraintModel: trifle!.escrowConstraintModel!,
-            escrowAccount: trifle!.tokenEscrow!,
-            payer: wallet.publicKey!,
+            trifle: new PublicKey(trifleAddressString as string),
             trifleAuthority: wallet.publicKey!,
-            attributeMint: selectedNFT.address,
-            attributeSrcTokenAccount: attributeSrcAddress,
-            attributeDstTokenAccount: attributeDstAddress,
-            attributeMetadata: selectedNFT.metadataAddress,
+            payer: wallet.publicKey!,
+            constraintModel: trifle!.escrowConstraintModel!,
+            escrow: trifle!.tokenEscrow!,
             escrowMint: baseToken!.address,
-            escrowTokenAccount: escrowTokenAccountAddress,
+            escrowToken: escrowTokenAccountAddress,
+            escrowEdition: baseToken!.edition.address,
+            attributeMint: selectedNFT.address,
+            attributeSrcToken: attributeSrcAddress,
+            attributeDstToken: attributeDstAddress,
+            attributeMetadata: selectedNFT.metadataAddress,
             splAssociatedTokenAccount: ASSOCIATED_TOKEN_PROGRAM_ID,
-            splToken: TOKEN_PROGRAM_ID
+            splToken: TOKEN_PROGRAM_ID,
+            tokenMetadataProgram: new PublicKey(TOKEN_METADATA_PROGRAM_ID),
         }, {
             transferInArgs: {
                 slot: selectedSlot,
@@ -159,7 +164,7 @@ const TrifleDetail: NextPage = () => {
             <Typography variant="h1">Trifle</Typography>
             <Stack direction={"row"} justifyContent={"space-between"}>
                 <Stack direction={"column"}>
-                    {baseToken?.json?.image && <img key={Date.now()} src={baseToken.json.image + "?" + Date.now()} height={500} width={500} />}
+                    {baseToken?.json?.image && <img key={Date.now()} alt={baseToken.json.image + "?" + Date.now()} src={baseToken.json.image + "?" + Date.now()} height={500} width={500} />}
                 </Stack>
                 <Stack direction={"column"} alignItems={"stretch"}>
                     <Typography variant={"h6"}>{selectedNFT?.json?.name || "Select an attribute NFT to transfer in"}</Typography>

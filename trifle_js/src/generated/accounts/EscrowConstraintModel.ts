@@ -85,8 +85,9 @@ export class EscrowConstraintModel implements EscrowConstraintModelArgs {
   static async fromAccountAddress(
     connection: web3.Connection,
     address: web3.PublicKey,
+    commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig,
   ): Promise<EscrowConstraintModel> {
-    const accountInfo = await connection.getAccountInfo(address);
+    const accountInfo = await connection.getAccountInfo(address, commitmentOrConfig);
     if (accountInfo == null) {
       throw new Error(`Unable to find EscrowConstraintModel account at ${address}`);
     }
@@ -100,7 +101,7 @@ export class EscrowConstraintModel implements EscrowConstraintModelArgs {
    * @param programId - the program that owns the accounts we are filtering
    */
   static gpaBuilder(
-    programId: web3.PublicKey = new web3.PublicKey('6PLSD84fn6MVb3XdPYAiX33X8jgfCPXeqYUmfnYndU3X'),
+    programId: web3.PublicKey = new web3.PublicKey('trifMWutwBxkSuatmpPVnEe7NoE3BJKgjVi8sSyoXWX'),
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, escrowConstraintModelBeet);
   }
