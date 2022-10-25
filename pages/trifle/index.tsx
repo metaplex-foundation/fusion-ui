@@ -70,7 +70,7 @@ const CreateTrifle: NextPage = () => {
         let [escrowAddress] = await findEscrowPda(selectedNFT.address, 1, trifleAddress);
 
         const tx = new Transaction();
-        let args = {
+        const instruction = createCreateTrifleAccountInstruction({
             escrow: escrowAddress,
             metadata: selectedNFT.metadataAddress,
             mint: selectedNFT.address,
@@ -78,13 +78,10 @@ const CreateTrifle: NextPage = () => {
             edition: selectedNFT.edition.address,
             trifleAccount: trifleAddress,
             trifleAuthority: wallet.publicKey,
-            escrowConstraintModel: selectedEscrowConstraintModelAddress,
+            constraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
             tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
-        };
-
-        console.log(args);
-        const instruction = createCreateTrifleAccountInstruction(args);
+        });
 
         try {
             tx.add(instruction);

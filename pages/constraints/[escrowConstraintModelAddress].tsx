@@ -46,7 +46,7 @@ const ConstraintDetail: NextPage = () => {
         setShowConstraintForm(true);
     }
 
-    const handleConstraintFormSubmit = async (name: string, tokenLimit: number, tokens: PublicKey[], constraintType: ConstraintType) => {
+    const handleConstraintFormSubmit = async (name: string, tokenLimit: number, tokens: PublicKey[], constraintType: ConstraintType, transferEffects: number) => {
         if (!wallet.publicKey) {
             toast.error("wallet disconnected");
             return;
@@ -58,33 +58,33 @@ const ConstraintDetail: NextPage = () => {
         switch (constraintType) {
             case ConstraintType.None:
                 tx.add(createAddNoneConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey
                 }, {
-                    addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                    addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
                 break;
             case ConstraintType.Collection:
                 let [mint] = tokens;
                 let metadataAddress = findMetadataPda(mint);
                 tx.add(createAddCollectionConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
                     collectionMint: mint,
                     collectionMintMetadata: metadataAddress,
                 }, {
-                    addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit }
+                    addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
                 break;
             case ConstraintType.Tokens:
                 tx.add(createAddTokensConstraintToEscrowConstraintModelInstruction({
-                    escrowConstraintModel,
+                    constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
                 }, {
-                    addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens }
+                    addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens, transferEffects }
                 }))
                 break;
             default:

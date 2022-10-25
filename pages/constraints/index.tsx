@@ -41,8 +41,7 @@ const Constraints: NextPage = () => {
         });
 
 
-        const tx = new Transaction();
-        tx.add(ix);
+        const tx = new Transaction().add(ix);
 
         try {
             const sig = await wallet.sendTransaction(tx, connection, { skipPreflight: true });
