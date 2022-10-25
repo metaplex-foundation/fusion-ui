@@ -34,8 +34,6 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
             .withFreezeParent(freezeParent)
             .toNumber();
 
-        console.log({ transferEffects });
-
         await onSubmit(name, tokenLimit, pubkeys, selectedConstraintType, transferEffects);
     }
 
