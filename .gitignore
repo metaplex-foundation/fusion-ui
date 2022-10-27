@@ -38,3 +38,4 @@ next-env.d.ts
 /js/
 /trifle_js/node_modules
 /tm_js/node_modules
+/tm_js/test

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { loadTrifleNFTs } from '../../helpers/loadNFTs';
 import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '../../tm_js/src/generated';
 
-const METAPLEX_BUCKET = "HW6bkpPZii3fwPwAmJm4USRB8QBo91iXcCkiBSuo8UmM";
+const METAPLEX_BUCKET = "Jf27xwhv6bH1aaPYtvJxvHvKRHoDe3DyQVqe4CJyxsP";
 
 type EscrowConstraintModelWithPubkey = {
     pubkey: PublicKey,
