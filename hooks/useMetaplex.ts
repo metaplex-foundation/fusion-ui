@@ -17,6 +17,5 @@ export const MetaplexContext = createContext<MetaplexContextInterface>(
 
 export function useMetaplex() {
   let ctx = useContext(MetaplexContext);
-  ctx.metaplex?.programs().register({name: "TokenMetadataProgram", address:PROGRAM_ID});
   return ctx;
 }

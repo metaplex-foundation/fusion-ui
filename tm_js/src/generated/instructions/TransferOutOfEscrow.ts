@@ -82,7 +82,7 @@ export const transferOutOfEscrowInstructionDiscriminator = 40;
 export function createTransferOutOfEscrowInstruction(
   accounts: TransferOutOfEscrowInstructionAccounts,
   args: TransferOutOfEscrowInstructionArgs,
-  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
 ) {
   const [data] = TransferOutOfEscrowStruct.serialize({
     instructionDiscriminator: transferOutOfEscrowInstructionDiscriminator,

@@ -52,7 +52,7 @@ const CreateTrifle: NextPage = () => {
 
     const handleNFTClick = (nft: Metadata) => {
         console.log(nft);
-        metaplex?.nfts().load({ metadata: nft }).then((loadedNFT) => {
+        metaplex?.nfts().load({ metadata: nft }).then((loadedNFT: any) => {
             console.log({ loadedNFT });
             setSelectedNFT(loadedNFT);
         });
@@ -77,7 +77,7 @@ const CreateTrifle: NextPage = () => {
 
         console.log(JSON.stringify(selectedNFT));
         const tx = new Transaction();
-        let args = {
+        const instruction = createCreateTrifleAccountInstruction({
             escrow: escrowAddress,
             metadata: selectedNFT.metadataAddress,
             mint: selectedNFT.address,
@@ -88,10 +88,7 @@ const CreateTrifle: NextPage = () => {
             constraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
             tokenMetadataProgram: new PublicKey(TOKEN_METADATA_PROGRAM_ID),
-        };
-
-        console.log(args);
-        const instruction = createCreateTrifleAccountInstruction(args);
+        });
 
         try {
             tx.add(instruction);

@@ -47,7 +47,7 @@ export const setTokenStandardInstructionDiscriminator = 35;
  */
 export function createSetTokenStandardInstruction(
   accounts: SetTokenStandardInstructionAccounts,
-  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
 ) {
   const [data] = SetTokenStandardStruct.serialize({
     instructionDiscriminator: setTokenStandardInstructionDiscriminator,

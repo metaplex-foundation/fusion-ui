@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Container, Typography, Select, MenuItem, Stack, ImageList, ImageListItem, Button } from "@mui/material";
-import { useWallet, useConnection, ConnectionContext } from '@solana/wallet-adapter-react';
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { toast } from 'react-toastify';
 import { PublicKey, Transaction } from '@solana/web3.js';
-import { Trifle, EscrowConstraintModel, createTransferInInstruction, createEscrowConstraintModelAccountArgsBeet } from "../../trifle_js/src/generated";
+import { Trifle, EscrowConstraintModel, createTransferInInstruction } from "../../trifle_js/src/generated";
 import { TokenOwnedEscrow, PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from "../../tm_js/src/generated";
 import { Nft, NftWithToken, Sft, SftWithToken } from "@metaplex-foundation/js";
 import { loadNFTs } from "../../helpers/loadNFTs";
@@ -70,7 +70,7 @@ const TrifleDetail: NextPage = () => {
 
         const nfts = await loadNFTs(metaplex!, wallet);
 
-        setAllNFTs(nfts.filter(nft => nft.address.toBase58() !== escrow!.baseToken.toBase58()));
+        setAllNFTs(nfts.filter((nft: any) => nft.address.toBase58() !== escrow!.baseToken.toBase58()));
 
         console.log({ trifle, escrowConstraintModel, escrow, slots, baseToken, nfts });
 
@@ -128,10 +128,10 @@ const TrifleDetail: NextPage = () => {
         const tx = new Transaction();
         const instruction = createTransferInInstruction({
             trifle: new PublicKey(trifleAddressString as string),
-            trifleAuthority: wallet.publicKey!,
-            payer: wallet.publicKey!,
             constraintModel: trifle!.escrowConstraintModel!,
             escrow: trifle!.tokenEscrow!,
+            payer: wallet.publicKey!,
+            trifleAuthority: wallet.publicKey!,
             escrowMint: baseToken!.address,
             escrowToken: escrowTokenAccountAddress,
             escrowEdition: baseToken!.edition.address,
@@ -139,9 +139,9 @@ const TrifleDetail: NextPage = () => {
             attributeSrcToken: attributeSrcAddress,
             attributeDstToken: attributeDstAddress,
             attributeMetadata: selectedNFT.metadataAddress,
-            splAssociatedTokenAccount: ASSOCIATED_TOKEN_PROGRAM_ID,
             splToken: TOKEN_PROGRAM_ID,
-            tokenMetadataProgram: new PublicKey(TOKEN_METADATA_PROGRAM_ID),
+            splAssociatedTokenAccount: ASSOCIATED_TOKEN_PROGRAM_ID,
+            tokenMetadataProgram: new PublicKey(TOKEN_METADATA_PROGRAM_ID)
         }, {
             transferInArgs: {
                 slot: selectedSlot,

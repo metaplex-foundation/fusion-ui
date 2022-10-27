@@ -78,7 +78,7 @@ export const deprecatedMintPrintingTokensViaTokenInstructionDiscriminator = 8;
 export function createDeprecatedMintPrintingTokensViaTokenInstruction(
   accounts: DeprecatedMintPrintingTokensViaTokenInstructionAccounts,
   args: DeprecatedMintPrintingTokensViaTokenInstructionArgs,
-  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
 ) {
   const [data] = DeprecatedMintPrintingTokensViaTokenStruct.serialize({
     instructionDiscriminator: deprecatedMintPrintingTokensViaTokenInstructionDiscriminator,

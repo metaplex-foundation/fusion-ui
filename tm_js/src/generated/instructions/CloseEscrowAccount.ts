@@ -51,7 +51,7 @@ export const closeEscrowAccountInstructionDiscriminator = 39;
  */
 export function createCloseEscrowAccountInstruction(
   accounts: CloseEscrowAccountInstructionAccounts,
-  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
 ) {
   const [data] = CloseEscrowAccountStruct.serialize({
     instructionDiscriminator: closeEscrowAccountInstructionDiscriminator,

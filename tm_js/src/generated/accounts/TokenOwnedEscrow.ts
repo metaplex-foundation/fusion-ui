@@ -79,7 +79,7 @@ export class TokenOwnedEscrow implements TokenOwnedEscrowArgs {
    * @param programId - the program that owns the accounts we are filtering
    */
   static gpaBuilder(
-    programId: web3.PublicKey = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+    programId: web3.PublicKey = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, tokenOwnedEscrowBeet);
   }
@@ -102,33 +102,31 @@ export class TokenOwnedEscrow implements TokenOwnedEscrowArgs {
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link TokenOwnedEscrow} for the provided args.
-   *
-   * @param args need to be provided since the byte size for this account
-   * depends on them
+   * {@link TokenOwnedEscrow}
    */
-  static byteSize(args: TokenOwnedEscrowArgs) {
-    const instance = TokenOwnedEscrow.fromArgs(args);
-    return tokenOwnedEscrowBeet.toFixedFromValue(instance).byteSize;
+  static get byteSize() {
+    return tokenOwnedEscrowBeet.byteSize;
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
    * {@link TokenOwnedEscrow} data from rent
    *
-   * @param args need to be provided since the byte size for this account
-   * depends on them
    * @param connection used to retrieve the rent exemption information
    */
   static async getMinimumBalanceForRentExemption(
-    args: TokenOwnedEscrowArgs,
     connection: web3.Connection,
     commitment?: web3.Commitment,
   ): Promise<number> {
-    return connection.getMinimumBalanceForRentExemption(
-      TokenOwnedEscrow.byteSize(args),
-      commitment,
-    );
+    return connection.getMinimumBalanceForRentExemption(TokenOwnedEscrow.byteSize, commitment);
+  }
+
+  /**
+   * Determines if the provided {@link Buffer} has the correct byte size to
+   * hold {@link TokenOwnedEscrow} data.
+   */
+  static hasCorrectByteSize(buf: Buffer, offset = 0) {
+    return buf.byteLength - offset === TokenOwnedEscrow.byteSize;
   }
 
   /**
@@ -139,7 +137,7 @@ export class TokenOwnedEscrow implements TokenOwnedEscrowArgs {
     return {
       key: 'Key.' + Key[this.key],
       baseToken: this.baseToken.toBase58(),
-      authority: this.authority.__kind,
+      authority: 'EscrowAuthority.' + EscrowAuthority[this.authority],
       bump: this.bump,
     };
   }
@@ -149,10 +147,7 @@ export class TokenOwnedEscrow implements TokenOwnedEscrowArgs {
  * @category Accounts
  * @category generated
  */
-export const tokenOwnedEscrowBeet = new beet.FixableBeetStruct<
-  TokenOwnedEscrow,
-  TokenOwnedEscrowArgs
->(
+export const tokenOwnedEscrowBeet = new beet.BeetStruct<TokenOwnedEscrow, TokenOwnedEscrowArgs>(
   [
     ['key', keyBeet],
     ['baseToken', beetSolana.publicKey],

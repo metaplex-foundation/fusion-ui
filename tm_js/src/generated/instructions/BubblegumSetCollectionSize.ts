@@ -68,7 +68,7 @@ export const bubblegumSetCollectionSizeInstructionDiscriminator = 36;
 export function createBubblegumSetCollectionSizeInstruction(
   accounts: BubblegumSetCollectionSizeInstructionAccounts,
   args: BubblegumSetCollectionSizeInstructionArgs,
-  programId = new web3.PublicKey('metAg34PXf1DtCM3pwpYiNMsMmTkYq6suEsGxfAVrRq'),
+  programId = new web3.PublicKey('metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'),
 ) {
   const [data] = BubblegumSetCollectionSizeStruct.serialize({
     instructionDiscriminator: bubblegumSetCollectionSizeInstructionDiscriminator,
