@@ -152,8 +152,7 @@ const CreateTrifle: NextPage = () => {
                     </ImageListItem>
                 ))}
             </ImageList>)}
-            {allNFTs.length === 0 && (
-                <Button variant="outlined" onClick={() => { if (wallet.publicKey) { createBaseNFT(wallet.publicKey); } }}>Create a Base NFT</Button>)}
+            <Button variant="outlined" onClick={() => { if (wallet.publicKey) { createBaseNFT(wallet.publicKey); } }}>Create a Base NFT</Button>
         </Container >
     )
 }
