@@ -5,7 +5,7 @@ import { Button, Container, Typography, Stack, ImageList, ImageListItem, Select,
 import { useConnection, useWallet, WalletContextState } from '@solana/wallet-adapter-react';
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { Metadata, Metaplex, Nft } from '@metaplex-foundation/js';
-import { AccountInfo, Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import { AccountInfo, Keypair, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY, Transaction } from '@solana/web3.js';
 import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../trifle_js/src/generated';
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
@@ -88,6 +88,7 @@ const CreateTrifle: NextPage = () => {
             constraintModel: selectedEscrowConstraintModelAddress,
             payer: wallet.publicKey,
             tokenMetadataProgram: new PublicKey(TOKEN_METADATA_PROGRAM_ID),
+            sysvarInstructions: SYSVAR_INSTRUCTIONS_PUBKEY,
         });
 
         try {
