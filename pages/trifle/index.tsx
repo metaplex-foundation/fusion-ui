@@ -14,6 +14,7 @@ import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintMo
 import { toast } from 'react-toastify';
 import { loadTrifleNFTs } from '../../helpers/loadNFTs';
 import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '../../tm_js/src/generated';
+import styles from '../../styles/Home.module.css'
 
 const METAPLEX_BUCKET = "Jf27xwhv6bH1aaPYtvJxvHvKRHoDe3DyQVqe4CJyxsP";
 
@@ -126,16 +127,14 @@ const CreateTrifle: NextPage = () => {
     }
 
     return (
-        <Container fixed>
-            <Typography variant="h1">Token Owned Escrow</Typography>
+        <Container className={styles.container} maxWidth="sm" fixed>
+            <Typography variant="h3" className={styles.mainHeading}>Token Owned Escrow</Typography>
             <Stack direction="column">
-                <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="body1">
-                        {selectedNFT ? `Selected NFT: ${selectedNFT.name}` : 'Select an NFT to become the base token'}
-                    </Typography>
-                    {selectedNFT ? <Button variant="contained" onClick={() => handleCreateTrifleAccount(selectedNFT)}>Create TOE</Button> : null}
-                </Stack>
-                <Select value={selectedEscrowConstraintModel} onChange={setSelectedModel}>
+                <Typography variant="body1">
+                    {selectedNFT ? `Selected NFT: ${selectedNFT.name}` : 'Select an NFT to become the base token'}
+                </Typography>
+                {selectedNFT ? <Button variant="contained" size="large" onClick={() => handleCreateTrifleAccount(selectedNFT)}>Create TOE</Button> : null}
+                <Select value={selectedEscrowConstraintModel} onChange={setSelectedModel} sx={{ margin: '30px 0' }}>
                     {Object.entries(escrowConstraintModels).map(([pubkey, ecm]) => {
                         console.log({ pubkey, ecm })
                         return <MenuItem key={ecm.name} value={pubkey}>{ecm.name}</MenuItem>
@@ -153,7 +152,7 @@ const CreateTrifle: NextPage = () => {
                     </ImageListItem>
                 ))}
             </ImageList>)}
-            <Button variant="outlined" onClick={() => { if (wallet.publicKey) { createBaseNFT(wallet.publicKey); } }}>Create a Base NFT</Button>
+            <Button variant="contained" size="large" onClick={() => { if (wallet.publicKey) { createBaseNFT(wallet.publicKey); } }}>Create a Base NFT</Button>
         </Container >
     )
 }

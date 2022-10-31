@@ -1,5 +1,23 @@
 .container {
+  /* background: #000; */
+  /* color: #fff; */
   padding: 0 2rem;
+  padding-top: 45px
+}
+
+.navList {
+  padding-top: 30px;
+}
+
+.link {
+  color: #1976d2;
+  
+}
+
+.mainHeading {
+  /* padding-top: 30px; */
+  padding-bottom: 15px;
+  font-weight: bold;
 }
 
 .main {

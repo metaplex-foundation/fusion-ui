@@ -90,7 +90,7 @@ export const EscrowConstraintForm: FC<EscrowConstraintFormProps> = ({ onSubmit }
                 <FormControlLabel control={<Checkbox checked={freeze} onChange={handleFreezeCheckboxClick} />} label="Freeze" />
                 <FormControlLabel control={<Checkbox checked={freezeParent} onChange={handleFreezeParentCheckboxClick} />} label="Freeze Parent" />
             </Stack>
-            <Button variant="outlined" type="submit">Submit</Button>
+            <Button variant="contained" type="submit" size="large">Submit</Button>
         </Stack>
     </Box >
 }

@@ -9,6 +9,7 @@ import { EscrowConstraintModel, EscrowConstraint, createAddNoneConstraintToEscro
 import { EscrowConstraintForm } from "../../components/EscrowConstraintForm";
 import { ConstraintType } from "../../helpers/constraintType";
 import { findMetadataPda } from "@metaplex-foundation/js";
+import styles from "../../styles/Home.module.css";
 
 const ConstraintDetail: NextPage = () => {
     const router = useRouter();
@@ -32,7 +33,7 @@ const ConstraintDetail: NextPage = () => {
             console.log("loaded");
         });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [escrowConstraintModelAddress])
 
     const loadEscrowConstraintModel = async (address: PublicKey): Promise<EscrowConstraintModel | null> => {
@@ -92,7 +93,7 @@ const ConstraintDetail: NextPage = () => {
                 console.log("reached impossible default case");
         }
 
-        let sig = await wallet.sendTransaction(tx, connection)
+        let sig = await wallet.sendTransaction(tx, connection, { skipPreflight: true });
 
         // TODO: reset form and reload constraint model.
         await connection.confirmTransaction(sig);
@@ -101,20 +102,20 @@ const ConstraintDetail: NextPage = () => {
     }
 
     return (
-        <Container>
-            <Typography variant="subtitle1">Escrow Constraint Model</Typography>
-            <Typography variant="h1">{escrowConstraintModel?.name}</Typography>
+        <Container className={styles.container} maxWidth="sm">
+            <Typography variant="h3" className={styles.mainHeading}>{escrowConstraintModel?.name}</Typography>
+            <Typography variant="h5">Your Escrow Constraint Model</Typography>
             <Stack>
-                <List>
+                <List sx={{ padding: '30px 0' }}>
                     {escrowConstraintModel ? Array.from(escrowConstraintModel.constraints.entries()).map(data => {
                         let [name, constraint] = data;
                         // constraint component goes here.
                         return (
-                            <div key={name}>{name}</div>
+                            <Typography variant="h6" sx={{ fontWeight: 'bold' }} key={name}>{name}</Typography>
                         )
                     }) : null}
                 </List>
-                {!showConstraintForm ? <Button variant="outlined" onClick={handleAddConstraintClick}>Add a Constraint</Button> : null}
+                {!showConstraintForm ? <Button variant="contained" onClick={handleAddConstraintClick}>Add a Constraint</Button> : null}
                 {showConstraintForm ? <EscrowConstraintForm onSubmit={handleConstraintFormSubmit} /> : null}
             </Stack>
         </Container>);
