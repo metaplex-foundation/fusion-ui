@@ -50,6 +50,9 @@ const TrifleDetail: NextPage = () => {
     const load = async () => {
         console.log(trifleAddressString);
         let trifle = await loadTrifleAccount(new PublicKey(trifleAddressString as string));
+        if (!trifle) {
+            console.log("No trifle found");
+        }
         setTrifle(trifle!);
 
         console.log(trifle);

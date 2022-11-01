@@ -123,6 +123,11 @@ const CreateTrifle: NextPage = () => {
             console.log(e);
         }
 
+        if (!result) {
+            toast.error("Failed to create base NFT");
+            return;
+        }
+
         handleCreateTrifleAccount(result?.nft);
     }
 
