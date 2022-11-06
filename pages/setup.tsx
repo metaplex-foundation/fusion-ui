@@ -104,8 +104,8 @@ export const Setup: NextPage = () => {
         <Typography variant="subtitle1">Create attribute NFTs to use use with a TOE</Typography>
         <Box sx={{ marginTop: 8 }}>
             <Stack direction="column" spacing={2}>
-                <Button variant="outlined" onClick={setupAttributeNFTs}>Create Attribute NFTs</Button>
-                <Button variant="outlined" onClick={setupCollectionNFT}>Create a Collection NFT</Button>
+                <Button variant="contained" size="large" onClick={setupAttributeNFTs}>Create Attribute NFTs</Button>
+                <Button variant="contained" size="large" onClick={setupCollectionNFT}>Create a Collection NFT</Button>
                 {collectionNFTMintAddress && <Typography>{collectionNFTMintAddress.toString()}</Typography>}
             </Stack>
         </Box>

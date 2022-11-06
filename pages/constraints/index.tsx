@@ -6,6 +6,7 @@ import type { NextPage } from 'next'
 import { toast } from 'react-toastify';
 import { createCreateEscrowConstraintModelAccountInstruction, PROGRAM_ID } from '../../trifle_js/src/generated'
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
+import styles from '../../styles/Home.module.css'
 
 const Constraints: NextPage = () => {
     const wallet = useWallet();
@@ -57,10 +58,10 @@ const Constraints: NextPage = () => {
 
     }
     return (
-        <Container fixed>
+        <Container fixed className={styles.container} maxWidth="sm">
             <Stack direction="column" spacing={2}>
-                <Typography variant="h1">Create A Constraint Model</Typography>
-                <Typography variant="body1">Explaination will go here</Typography>
+                <Typography variant="h3" className={styles.mainHeading}>Create A Constraint Model</Typography>
+                <Typography variant="body1">You can use the inputs below to name your project. The Schema URI is the address to your publicly hosted Whipped Cream Schema JSON file. For more information, <a href="#" className={styles.link}>you can find the documentation here</a>.</Typography>
                 <Box
                     component="form"
                     noValidate
@@ -75,7 +76,7 @@ const Constraints: NextPage = () => {
                     <Stack direction="column" spacing={2}>
                         <TextField id="name" label="Name" variant="outlined" inputRef={nameInputRef} />
                         <TextField id="schemaUri" label="Schema URI" variant="outlined" inputRef={schemaInputRef} />
-                        <Button variant="outlined" type="submit" >Submit</Button>
+                        <Button variant="contained" size="large" type="submit" >Submit</Button>
                     </Stack>
                 </Box>
             </Stack>

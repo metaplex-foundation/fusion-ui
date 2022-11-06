@@ -3,6 +3,7 @@ import { List, ListItem } from "@mui/material"
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
+import { Button, Stack } from "@mui/material"
 
 const Home: NextPage = () => {
   return (
@@ -13,18 +14,25 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <List>
-        <ListItem>
-          <Link href="/constraints" >Create A Constraint Model</Link>
+
+      <List className={styles.navList}>
+        <ListItem sx={{ textAlign: 'center' }}>
+          <Button variant='contained' size="large">
+            <Link href="/constraints" >Create A Constraint Model</Link>
+          </Button>
         </ListItem>
         <ListItem>
-          <Link href="/trifle" >Create A Token-Owned Escrow</Link>
+          <Button variant='contained' size="large">
+            <Link href="/trifle" >Create A Token-Owned Escrow</Link>
+          </Button>
         </ListItem>
         <ListItem>
-          <Link href="/setup" >Set up example NFTs</Link>
+          <Button variant='contained' size="large">
+            <Link href="/setup" >Set up example NFTs</Link>
+          </Button>
         </ListItem>
       </List>
-    </div>
+    </div >
   )
 }
 

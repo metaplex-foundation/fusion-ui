@@ -9,10 +9,10 @@ import Link from "next/link";
 export default function WalletButtonAppBar() {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: "#2a2a2a" }}>
+            <AppBar position="static" sx={{ backgroundColor: "lightgrey" }}>
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link href={"/"}>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#000' }}>
+                        <Link href={"/"} >
                             🍰 Trifle UI
                         </Link>
                     </Typography>

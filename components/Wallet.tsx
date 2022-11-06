@@ -23,7 +23,8 @@ export const Wallet: FC<Props> = ({ children }) => {
     // // You can also provide a custom RPC endpoint.
     // const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-    const endpoint = "https://wispy-proud-butterfly.solana-devnet.quiknode.pro/47f7e86096c0fc7c3f2ecd30b0db25652df6e672/"
+    // const endpoint = "https://wispy-proud-butterfly.solana-devnet.quiknode.pro/47f7e86096c0fc7c3f2ecd30b0db25652df6e672/"
+    const endpoint = "http://localhost:8899"
 
     const wallets = useMemo(
         () => [

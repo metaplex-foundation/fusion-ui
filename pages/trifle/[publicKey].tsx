@@ -44,12 +44,15 @@ const TrifleDetail: NextPage = () => {
         }
 
         load().then(() => clearInterval(interval));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [trifleAddressString, metaplex, wallet.publicKey, time]);
 
     const load = async () => {
         console.log(trifleAddressString);
         let trifle = await loadTrifleAccount(new PublicKey(trifleAddressString as string));
+        if (!trifle) {
+            console.log("No trifle found");
+        }
         setTrifle(trifle!);
 
         console.log(trifle);
@@ -172,7 +175,7 @@ const TrifleDetail: NextPage = () => {
                         <Select value={selectedSlot} sx={{ width: "400px" }} onChange={handleSlotChange}>
                             {slots.map((slot) => <MenuItem key={slot} value={slot}>{slot}</MenuItem>)}
                         </Select>
-                        <Button onClick={handleTransferClick} variant={"outlined"}>Transfer</Button>
+                        <Button onClick={handleTransferClick} variant={"contained"} size="large">Transfer</Button>
                     </Stack>
                     <ImageList sx={{ width: 500, height: 500 }} cols={2} rowHeight={100}>
                         {allNFTs.map((nft) => <ImageListItem key={nft.address.toString()} onClick={() => handleNFTClick(nft)} >
