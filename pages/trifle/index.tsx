@@ -6,7 +6,7 @@ import { useConnection, useWallet, WalletContextState } from '@solana/wallet-ada
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { Metadata, Metaplex, Nft } from '@metaplex-foundation/js';
 import { AccountInfo, Keypair, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY, Transaction } from '@solana/web3.js';
-import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../trifle_js/src/generated';
+import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '@metaplex-foundation/mpl-trifle/dist/src/generated';
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { findEscrowPda, findTriflePda } from '../../helpers/pdas';

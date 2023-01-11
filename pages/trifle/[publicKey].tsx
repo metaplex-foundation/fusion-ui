@@ -7,7 +7,7 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { toast } from 'react-toastify';
 import { PublicKey, Transaction } from '@solana/web3.js';
-import { Trifle, EscrowConstraintModel, createTransferInInstruction } from "../../trifle_js/src/generated";
+import { Trifle, EscrowConstraintModel, createTransferInInstruction } from "@metaplex-foundation/mpl-trifle/dist/src/generated";
 import { TokenOwnedEscrow, PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from "../../tm_js/src/generated";
 import { Nft, NftWithToken, Sft, SftWithToken } from "@metaplex-foundation/js";
 import { loadNFTs } from "../../helpers/loadNFTs";

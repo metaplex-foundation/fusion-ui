@@ -5,7 +5,7 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { Container, Typography, Stack, Button, List, ListItem } from "@mui/material";
-import { EscrowConstraintModel, EscrowConstraint, createAddNoneConstraintToEscrowConstraintModelInstruction, createAddCollectionConstraintToEscrowConstraintModelInstruction, createAddTokensConstraintToEscrowConstraintModelInstruction } from "../../trifle_js/src/generated";
+import { EscrowConstraintModel, EscrowConstraint, createAddNoneConstraintToEscrowConstraintModelInstruction, createAddCollectionConstraintToEscrowConstraintModelInstruction, createAddTokensConstraintToEscrowConstraintModelInstruction } from "@metaplex-foundation/mpl-trifle/dist/src/generated";
 import { EscrowConstraintForm } from "../../components/EscrowConstraintForm";
 import { ConstraintType } from "../../helpers/constraintType";
 import { findMetadataPda } from "@metaplex-foundation/js";

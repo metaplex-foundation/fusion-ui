@@ -1,10 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
 import { Checkbox, Select, TextField, Stack, Typography, Box, Button, MenuItem, FormControlLabel } from "@mui/material";
 import { useState, createRef, FC } from "react";
-import { EscrowConstraintType, EscrowConstraint } from "../trifle_js/src/generated";
 import { ConstraintType } from "../helpers/constraintType";
 import { toast } from "react-toastify";
-import { TransferEffects } from "../trifle_js/src/transfer-effects";
+import { TransferEffects } from "@metaplex-foundation/mpl-trifle/dist/src/transfer-effects";
 
 type EscrowConstraintFormProps = {
     onSubmit: (name: string, tokenLimit: number, pubkeys: PublicKey[], constraintType: ConstraintType, transferEffects: number) => Promise<void>

@@ -2,7 +2,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import {
   EscrowConstraintModel,
   PROGRAM_ADDRESS,
-} from "../trifle_js/src/generated";
+} from "@metaplex-foundation/mpl-trifle/dist/src/generated";
 
 export const loadEscrowConstraintModels = async (
   publicKey: PublicKey,
