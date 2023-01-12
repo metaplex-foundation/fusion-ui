@@ -1,6 +1,6 @@
 import { Metaplex } from "@metaplex-foundation/js";
 import { createContext, useContext } from "react";
-import { PROGRAM_ID } from "../tm_js/src/generated";
+import { PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 
 
 interface MetaplexContextInterface {

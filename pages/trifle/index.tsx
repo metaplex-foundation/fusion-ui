@@ -13,7 +13,7 @@ import { findEscrowPda, findTriflePda } from '../../helpers/pdas';
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 import { toast } from 'react-toastify';
 import { loadTrifleNFTs } from '../../helpers/loadNFTs';
-import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '../../tm_js/src/generated';
+import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '@metaplex-foundation/mpl-token-metadata';
 
 const METAPLEX_BUCKET = "Jf27xwhv6bH1aaPYtvJxvHvKRHoDe3DyQVqe4CJyxsP";
 

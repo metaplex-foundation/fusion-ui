@@ -8,7 +8,7 @@ import { useMetaplex } from '../../hooks/useMetaplex';
 import { toast } from 'react-toastify';
 import { PublicKey, Transaction } from '@solana/web3.js';
 import { Trifle, EscrowConstraintModel, createTransferInInstruction } from "@metaplex-foundation/mpl-trifle/dist/src/generated";
-import { TokenOwnedEscrow, PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from "../../tm_js/src/generated";
+import { TokenOwnedEscrow, PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from "@metaplex-foundation/mpl-token-metadata";
 import { Nft, NftWithToken, Sft, SftWithToken } from "@metaplex-foundation/js";
 import { loadNFTs } from "../../helpers/loadNFTs";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
