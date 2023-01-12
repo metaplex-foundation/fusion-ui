@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { PublicKey, Transaction, SYSVAR_INSTRUCTIONS_PUBKEY } from "@solana/web3.js";
 import { toast } from "react-toastify";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import type { NextPage } from "next";
@@ -61,7 +61,8 @@ const ConstraintDetail: NextPage = () => {
                 tx.add(createAddNoneConstraintToEscrowConstraintModelInstruction({
                     constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
-                    updateAuthority: wallet.publicKey
+                    updateAuthority: wallet.publicKey,
+                    sysvarInstructions: SYSVAR_INSTRUCTIONS_PUBKEY,
                 }, {
                     addNoneConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
@@ -75,6 +76,7 @@ const ConstraintDetail: NextPage = () => {
                     updateAuthority: wallet.publicKey,
                     collectionMint: mint,
                     collectionMintMetadata: metadataAddress,
+                    sysvarInstructions: SYSVAR_INSTRUCTIONS_PUBKEY,
                 }, {
                     addCollectionConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, transferEffects }
                 }));
@@ -84,6 +86,7 @@ const ConstraintDetail: NextPage = () => {
                     constraintModel: escrowConstraintModel,
                     payer: wallet.publicKey,
                     updateAuthority: wallet.publicKey,
+                    sysvarInstructions: SYSVAR_INSTRUCTIONS_PUBKEY,
                 }, {
                     addTokensConstraintToEscrowConstraintModelArgs: { constraintName: name, tokenLimit, tokens, transferEffects }
                 }))
