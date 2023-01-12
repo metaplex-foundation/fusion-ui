@@ -12,6 +12,8 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@metaplex-foundation/js": "^0.17.2",
+    "@metaplex-foundation/mpl-token-metadata": "^2.5.2",
+    "@metaplex-foundation/mpl-trifle": "^0.3.2",
     "@mui/material": "^5.10.5",
     "@solana/spl-token": "^0.3.5",
     "@solana/wallet-adapter-base": "^0.9.16",

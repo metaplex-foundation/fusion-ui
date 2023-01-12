@@ -6,14 +6,14 @@ import { useConnection, useWallet, WalletContextState } from '@solana/wallet-ada
 import { useMetaplex } from '../../hooks/useMetaplex';
 import { Metadata, Metaplex, Nft } from '@metaplex-foundation/js';
 import { AccountInfo, Keypair, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY, Transaction } from '@solana/web3.js';
-import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '../../trifle_js/src/generated';
+import { EscrowConstraintModel, createCreateTrifleAccountInstruction } from '@metaplex-foundation/mpl-trifle/dist/src/generated';
 import { getAssociatedTokenAddress } from '@solana/spl-token';
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { findEscrowPda, findTriflePda } from '../../helpers/pdas';
 import { loadEscrowConstraintModels } from '../../helpers/loadEscrowConstraintModels';
 import { toast } from 'react-toastify';
 import { loadTrifleNFTs } from '../../helpers/loadNFTs';
-import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '../../tm_js/src/generated';
+import { PROGRAM_ADDRESS as TOKEN_METADATA_PROGRAM_ID } from '@metaplex-foundation/mpl-token-metadata';
 
 const METAPLEX_BUCKET = "Jf27xwhv6bH1aaPYtvJxvHvKRHoDe3DyQVqe4CJyxsP";
 
